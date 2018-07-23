@@ -17,12 +17,24 @@ android {
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+    signingConfigs {
+        defaultConfig {
+            //use debug keystore on all build variants, in order to be able to test release builds
+            storeFile file("/Users/catalin/.android/debug.keystore")
+            storePassword "android"
+            keyAlias "androiddebugkey"
+            keyPassword "android"
+        }
+    }
+
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            signingConfig signingConfigs.defaultConfig
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
     sourceSets {
         //add the kotlin folder as a sources folder
         main.java.srcDirs += 'src/main/kotlin'
