@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <include
+            android:id="@+id/binding_info_container"
+            layout="@layout/partial_current_view_binding_info" />
+
+        <include
+            android:id="@+id/sum_add_one"
+            layout="@layout/partial_add_to_sum"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/binding_info_container" />
+
+        <Button
+            android:id="@+id/button_goto_fragment2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="To childFragment 2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/sum_add_one" />
+
+        <Button
+            android:id="@+id/button_add_child_fragment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="@string/add_child_frag"
+            app:layout_constraintBaseline_toBaselineOf="@id/button_goto_fragment2"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <FrameLayout
+            android:id="@+id/container_fragment1_child_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="#8f8f8f"
+            android:padding="10dp"
+            app:layout_constraintTop_toBottomOf="@id/button_add_child_fragment" />
+    </android.support.constraint.ConstraintLayout>
+</ScrollView>

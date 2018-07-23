@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Wheelbarrow Demo</string>
+    <string name="remove_child_frag">Remove child fragment</string>
+    <string name="add_child_frag">Add child fragment</string>
+</resources>

@@ -1,0 +1,3 @@
+include ':app', ':wheelbarrow', ':dagger-app'
+project(':dagger-app').projectDir = new File('samples/dagger-app')
+project(':app').projectDir = new File('samples/app')

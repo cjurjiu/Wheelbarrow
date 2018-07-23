@@ -1,0 +1,59 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+
+android {
+    compileSdkVersion "$config.build_versions.compileSdkVersion".toInteger()
+
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion 27
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    }
+
+    buildTypes {
+        release {
+            postprocessing {
+                removeUnusedCode false
+                removeUnusedResources false
+                obfuscate false
+                optimizeCode false
+                proguardFile 'proguard-rules.pro'
+            }
+        }
+    }
+
+    compileOptions {
+        targetCompatibility "$config.build_versions.targetCompatibility"
+        sourceCompatibility "$config.build_versions.targetCompatibility"
+    }
+
+    sourceSets {
+        //add the kotlin folder as a sources folder
+        main.java.srcDirs += 'src/main/kotlin'
+    }
+    configurations {
+        all {
+            resolutionStrategy {
+                force "android.arch.lifecycle:livedata-core:1.1.1"
+            }
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation "com.android.support:appcompat-v7:$config.lib_versions.support_library"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$config.lib_versions.kotlin"
+    //viewmodel & extensions
+    implementation "android.arch.lifecycle:viewmodel:$config.lib_versions.viewmodel"
+    //todo switch to implementation. "api" here is a temporary workaround
+    api "android.arch.lifecycle:extensions:$config.lib_versions.extensions"
+    testImplementation "junit:junit:$config.lib_versions.junit"
+    //instrumentation tests
+    androidTestImplementation "com.android.support.test:runner:$config.lib_versions.android_test_runner"
+    androidTestImplementation "com.android.support.test.espresso:espresso-core:$config.lib_versions.espresso_core"
+}
