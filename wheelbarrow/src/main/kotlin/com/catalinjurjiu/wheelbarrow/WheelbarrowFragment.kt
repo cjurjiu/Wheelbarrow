@@ -7,6 +7,8 @@ import com.catalinjurjiu.common.NamedComponent
 import com.catalinjurjiu.wheelbarrow.common.identity
 import com.catalinjurjiu.wheelbarrow.log.Chronicle
 import com.catalinjurjiu.wheelbarrow.store.CargoStore
+import kotlin.properties.ReadWriteProperty
+import kotlin.reflect.KProperty
 
 /**
  * T is the type of the Injector to be stored during a configuration change.
@@ -19,10 +21,11 @@ import com.catalinjurjiu.wheelbarrow.store.CargoStore
 @Suppress("UNCHECKED_CAST")
 abstract class WheelbarrowFragment<CargoType : Any> : Fragment(), NamedComponent {
 
+    protected val cargo: CargoType by lazy(LazyThreadSafetyMode.NONE) { cargoInternal }
+
+    private lateinit var cargoInternal: CargoType
     private var doPersistCargoToViewModel: Boolean = false
     private var doReadCargoFromViewModel: Boolean = true
-    protected lateinit var cargo: CargoType
-        private set
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +37,7 @@ abstract class WheelbarrowFragment<CargoType : Any> : Fragment(), NamedComponent
                 .get(name, CargoStore::class.java) as CargoStore<CargoType>
         if (doPersistCargoToViewModel) {
             if (isCargoInitialized()) {
-                cargoStore.component = cargo
+                cargoStore.component = cargoInternal
                 Chronicle.logDebug(this::class.java.simpleName, "Saved cargo: " +
                         "${cargoStore.identity()} for: ${this.identity()}.")
             } else {
@@ -46,7 +49,7 @@ abstract class WheelbarrowFragment<CargoType : Any> : Fragment(), NamedComponent
             }
         } else if (doReadCargoFromViewModel) {
             if (cargoStore.hasComp) {
-                cargo = cargoStore.component
+                cargoInternal = cargoStore.component
                 Chronicle.logDebug(this::class.java.simpleName, "Re-initialised cargo: " +
                         "${cargoStore.identity()} for: ${this.identity()}.")
             } else {
@@ -60,7 +63,7 @@ abstract class WheelbarrowFragment<CargoType : Any> : Fragment(), NamedComponent
     }
 
     private fun isCargoInitialized(): Boolean {
-        return ::cargo.isInitialized
+        return ::cargoInternal.isInitialized
     }
 
     abstract class Factory<CargoType : Any> : com.catalinjurjiu.common.Factory<WheelbarrowFragment<CargoType>> {
@@ -68,7 +71,7 @@ abstract class WheelbarrowFragment<CargoType : Any> : Fragment(), NamedComponent
         final override fun create(): WheelbarrowFragment<CargoType> {
             val f: WheelbarrowFragment<CargoType> = onCreateFragment()
             val daggerComponent: CargoType = onRequestCargo()
-            f.cargo = daggerComponent
+            f.cargoInternal = daggerComponent
             f.doPersistCargoToViewModel = true
             f.doReadCargoFromViewModel = false
             return f

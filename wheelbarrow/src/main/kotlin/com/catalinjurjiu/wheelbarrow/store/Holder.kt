@@ -1,4 +1,4 @@
-package com.catalinjurjiu.common
+package com.catalinjurjiu.wheelbarrow.store
 
 /**
  * Interface for a class which holds a reference to a particular object type.
