@@ -56,4 +56,5 @@ dependencies {
     //instrumentation tests
     androidTestImplementation "com.android.support.test:runner:$config.lib_versions.android_test_runner"
     androidTestImplementation "com.android.support.test.espresso:espresso-core:$config.lib_versions.espresso_core"
+    androidTestImplementation 'junit:junit:4.12'
 }
