@@ -1,0 +1,43 @@
+apply plugin: 'org.jetbrains.dokka'
+
+//generates javadoc.jar
+task dokkaDocJar(type: Jar, dependsOn: dokka) {
+    description 'Creates a jar archive which will contain html documentation of a Kotlin project.'
+    from 'build/javadoc'
+    classifier = 'javadoc'
+}
+
+//Dokka configuration
+dokka {
+    moduleName = project.name
+    outputFormat = 'html'
+    outputDirectory = "${project.buildDir}/javadoc}"
+    // These tasks will be used to determine source directories and classpath
+    kotlinTasks {
+        defaultKotlinTasks()
+    }
+    // Used for linking to JDK
+    jdkVersion = 7
+    // Use to include or exclude non public members.
+    includeNonPublic = false
+    // Do not output deprecated members. Applies globally, can be overridden by packageOptions
+    skipDeprecated = false
+    // Do not create index pages for empty packages
+    skipEmptyPackages = true
+
+    externalDocumentationLink {
+        url = new URL("https://developer.android.com/reference/")
+        packageListUrl = new URL("https://developer.android.com/reference/android/support/package-list")
+    }
+
+    externalDocumentationLink {
+        url = new URL("https://developer.android.com/reference/")
+    }
+
+    // Suppress a package
+    packageOptions {
+        // will match android and all sub-packages of it
+        prefix = "android"
+        suppress = true
+    }
+}

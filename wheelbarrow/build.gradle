@@ -1,5 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply from: 'bintray-upload.gradle'
+apply from: 'dokka-config.gradle'
 
 android {
     compileSdkVersion "$config.build_versions.compileSdkVersion".toInteger()
@@ -11,7 +13,6 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
     }
 
     buildTypes {
@@ -35,13 +36,16 @@ android {
         //add the kotlin folder as a sources folder
         main.java.srcDirs += 'src/main/kotlin'
     }
-    configurations {
-        all {
-            resolutionStrategy {
-                force "android.arch.lifecycle:livedata-core:1.1.1"
-            }
-        }
-    }
+}
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+artifacts {
+    archives dokkaDocJar
+    archives sourcesJar
 }
 
 dependencies {

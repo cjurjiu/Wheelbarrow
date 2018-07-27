@@ -1,0 +1,85 @@
+apply plugin: 'maven'
+apply plugin: 'maven-publish'
+apply plugin: 'com.jfrog.bintray'
+
+/**
+ * Source: https://gist.github.com/Robyer/a6578e60127418b380ca133a1291f017
+ */
+def addDependencies = { Node dependenciesNode, Dependency dep, String scope ->
+    if (dep.group == null || dep.version == null || dep.name == null || dep.name == "unspecified") {
+        return // ignore invalid dependencies
+    }
+
+    final dependencyNode = dependenciesNode.appendNode('dependency')
+    dependencyNode.appendNode('groupId', dep.group)
+    dependencyNode.appendNode('artifactId', dep.name)
+    dependencyNode.appendNode('version', dep.version)
+    dependencyNode.appendNode('scope', scope)
+
+    if (!dep.transitive) {
+        // If this dependency is transitive, we should force exclude all its dependencies them from the POM
+        final exclusionNode = dependencyNode.appendNode('exclusions').appendNode('exclusion')
+        exclusionNode.appendNode('groupId', '*')
+        exclusionNode.appendNode('artifactId', '*')
+    } else if (!dep.properties.excludeRules.empty) {
+        // Otherwise add specified exclude rules
+        final exclusionNode = dependencyNode.appendNode('exclusions').appendNode('exclusion')
+        dep.properties.excludeRules.each { ExcludeRule rule ->
+            exclusionNode.appendNode('groupId', rule.group ?: '*')
+            exclusionNode.appendNode('artifactId', rule.module ?: '*')
+        }
+    }
+}
+
+def writeDependenciesToPom = { pom, configurations ->
+    pom.withXml {
+        //create the dependencies node
+        final Node dependenciesNode = asNode().appendNode('dependencies')
+        //get all api dependencies
+        final apiDependencies = configurations.api.getAllDependencies()
+        // List all "api" dependencies as "compile" dependencies
+        apiDependencies.each { dep -> addDependencies(dependenciesNode, dep, "compile") }
+        // List all "implementation" dependencies as "runtime" dependencies
+        configurations.implementation.getAllDependencies().each { dep ->
+            if (!apiDependencies.contains(dep)) {
+                addDependencies(dependenciesNode, dep, "runtime")
+            }
+        }
+    }
+}
+
+publishing {
+    publications {
+        BintrayRelease(MavenPublication) {
+            artifactId 'wheelbarrow'
+            groupId 'com.catalinjurjiu'
+            version '0.0.1'
+            setArtifacts(
+                    Arrays.asList(bundleRelease,
+                            sourcesJar,
+                            dokkaDocJar)
+            )
+            writeDependenciesToPom(pom, configurations)
+        }
+    }
+}
+
+bintray {
+    user = localProperties.getProperty('bintrayUser')
+    key = localProperties.getProperty('bintrayApiKey')
+    publications = ['BintrayRelease']
+    pkg {
+        repo = 'cjurjiu-opensource'
+        name = 'wheelbarrow'
+        labels = ['android', 'android library', 'open source']
+        publicDownloadNumbers = true
+        override = true
+        version {
+            name = '0.0.1'
+            desc = 'Wheelbarrow'
+            released = new Date()
+            licenses = ['Apache-2.0']
+            vcsUrl = 'https://github.com/cjurjiu/wheelbarrow'
+        }
+    }
+}
