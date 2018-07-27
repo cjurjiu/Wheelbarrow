@@ -5,10 +5,10 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.catalinjurjiu.wheelbarrowdemo.R
 import com.catalinjurjiu.wheelbarrow.WheelbarrowFragment
+import com.catalinjurjiu.wheelbarrowdemo.R
 import com.catalinjurjiu.wheelbarrowdemo.common.SumViewPresenter
-import com.catalinjurjiu.wheelbarrow.common.identityHashCode
+import com.catalinjurjiu.wheelbarrowdemo.common.identityHashCode
 import kotlinx.android.synthetic.main.partial_add_to_sum.view.*
 import kotlinx.android.synthetic.main.partial_current_view_binding_info.view.*
 

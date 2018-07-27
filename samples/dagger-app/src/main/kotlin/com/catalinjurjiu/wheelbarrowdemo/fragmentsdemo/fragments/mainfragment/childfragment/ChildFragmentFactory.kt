@@ -10,7 +10,7 @@ class ChildFragmentFactory(private val parentInjector: MainFragmentComponent) :
 
     override fun onCreateFragment(): WheelbarrowFragment<ChildFragmentComponent> = ChildFragment()
 
-    override fun onRequestCargo(): ChildFragmentComponent {
+    override fun onCreateCargo(): ChildFragmentComponent {
         val module = ChildFragmentModule()
         return parentInjector.getChildFragmentComponent(module)
     }

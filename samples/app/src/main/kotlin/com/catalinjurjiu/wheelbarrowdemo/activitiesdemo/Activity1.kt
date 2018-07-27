@@ -3,10 +3,10 @@ package com.catalinjurjiu.wheelbarrowdemo.activitiesdemo
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import com.catalinjurjiu.wheelbarrowdemo.R
 import com.catalinjurjiu.wheelbarrow.WheelbarrowActivity
+import com.catalinjurjiu.wheelbarrowdemo.R
 import com.catalinjurjiu.wheelbarrowdemo.common.SumViewPresenter
-import com.catalinjurjiu.wheelbarrow.common.identityHashCode
+import com.catalinjurjiu.wheelbarrowdemo.common.identityHashCode
 import kotlinx.android.synthetic.main.binding_info_and_back_button.*
 import kotlinx.android.synthetic.main.partial_add_to_sum.*
 import kotlinx.android.synthetic.main.partial_current_view_binding_info.*

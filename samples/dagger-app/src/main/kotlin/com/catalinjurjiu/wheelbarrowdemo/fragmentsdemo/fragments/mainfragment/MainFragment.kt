@@ -6,9 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.catalinjurjiu.wheelbarrow.WheelbarrowFragment
-import com.catalinjurjiu.wheelbarrow.common.identityHashCode
 import com.catalinjurjiu.wheelbarrowdemo.R
 import com.catalinjurjiu.wheelbarrowdemo.common.SumViewPresenter
+import com.catalinjurjiu.wheelbarrowdemo.common.identityHashCode
 import com.catalinjurjiu.wheelbarrowdemo.di.fragmentsdemo.MainFragmentComponent
 import com.catalinjurjiu.wheelbarrowdemo.di.fragmentsdemo.MainFragmentQualifier
 import com.catalinjurjiu.wheelbarrowdemo.fragmentsdemo.fragments.fragment2.Fragment2

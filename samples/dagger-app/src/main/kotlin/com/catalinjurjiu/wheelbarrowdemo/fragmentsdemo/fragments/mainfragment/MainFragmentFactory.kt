@@ -10,7 +10,7 @@ class MainFragmentFactory(private val rootComponent: RootComponent) :
 
     override fun onCreateFragment(): WheelbarrowFragment<MainFragmentComponent> = MainFragment()
 
-    override fun onRequestCargo(): MainFragmentComponent {
+    override fun onCreateCargo(): MainFragmentComponent {
         val module = MainFragmentModule()
         return rootComponent.getMainFragmentComponent(module)
     }

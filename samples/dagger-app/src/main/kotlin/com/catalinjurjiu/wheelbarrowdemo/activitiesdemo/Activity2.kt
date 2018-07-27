@@ -2,11 +2,11 @@ package com.catalinjurjiu.wheelbarrowdemo.activitiesdemo
 
 import android.os.Bundle
 import android.view.View
+import com.catalinjurjiu.wheelbarrow.WheelbarrowActivity
 import com.catalinjurjiu.wheelbarrowdemo.DaggerApplication
 import com.catalinjurjiu.wheelbarrowdemo.R
-import com.catalinjurjiu.wheelbarrow.WheelbarrowActivity
 import com.catalinjurjiu.wheelbarrowdemo.common.SumViewPresenter
-import com.catalinjurjiu.wheelbarrow.common.identityHashCode
+import com.catalinjurjiu.wheelbarrowdemo.common.identityHashCode
 import com.catalinjurjiu.wheelbarrowdemo.di.activitiesdemo.Activity2Component
 import com.catalinjurjiu.wheelbarrowdemo.di.activitiesdemo.Activity2Module
 import kotlinx.android.synthetic.main.binding_info_and_back_button.*
@@ -30,7 +30,7 @@ class Activity2 : WheelbarrowActivity<Activity2Component>() {
         initViews()
     }
 
-    override fun onCreateInjector(): Activity2Component {
+    override fun onCreateCargo(): Activity2Component {
         val module = Activity2Module()
         return (application as DaggerApplication).injectionRoot.getActivity2Component(module)
     }

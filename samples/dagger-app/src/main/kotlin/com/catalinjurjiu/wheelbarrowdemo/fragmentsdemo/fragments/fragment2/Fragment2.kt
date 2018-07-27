@@ -5,9 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.catalinjurjiu.wheelbarrow.WheelbarrowFragment
-import com.catalinjurjiu.wheelbarrow.common.identityHashCode
 import com.catalinjurjiu.wheelbarrowdemo.R
 import com.catalinjurjiu.wheelbarrowdemo.common.SumViewPresenter
+import com.catalinjurjiu.wheelbarrowdemo.common.identityHashCode
 import com.catalinjurjiu.wheelbarrowdemo.di.fragmentsdemo.Fragment2Component
 import com.catalinjurjiu.wheelbarrowdemo.di.fragmentsdemo.Fragment2Qualifier
 import kotlinx.android.synthetic.main.binding_info_and_back_button.view.*

@@ -10,7 +10,7 @@ class Fragment2Factory(private val parentComponent: MainFragmentComponent) :
 
     override fun onCreateFragment(): WheelbarrowFragment<Fragment2Component> = Fragment2()
 
-    override fun onRequestCargo(): Fragment2Component {
+    override fun onCreateCargo(): Fragment2Component {
         val module = Fragment2Module()
         return parentComponent.getFragment2Component(module)
     }

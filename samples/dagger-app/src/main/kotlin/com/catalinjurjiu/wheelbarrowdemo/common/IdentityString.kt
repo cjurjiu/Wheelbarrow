@@ -1,4 +1,4 @@
-package com.catalinjurjiu.wheelbarrow.common
+package com.catalinjurjiu.wheelbarrowdemo.common
 
 /**
  * Returns the hex value of [System.identityHashCode] applied to this object as a [String].
