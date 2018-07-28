@@ -41,7 +41,7 @@ abstract class WheelbarrowFragment<CargoType : Any> : Fragment(), NamedComponent
     /**
      * The cargo stored by this [WheelbarrowFragment].
      */
-    protected val cargo: CargoType by lazy(LazyThreadSafetyMode.NONE) { cargoInternal }
+    protected open val cargo: CargoType by lazy(LazyThreadSafetyMode.NONE) { cargoInternal }
 
     private lateinit var cargoInternal: CargoType
     private var doPersistCargoToViewModel: Boolean = false

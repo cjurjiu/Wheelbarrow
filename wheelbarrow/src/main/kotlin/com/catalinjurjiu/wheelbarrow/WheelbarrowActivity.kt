@@ -34,8 +34,9 @@ abstract class WheelbarrowActivity<CargoType : Any> : Wheelbarrow<CargoType>, Ap
     /**
      * The cargo stored by this [WheelbarrowActivity].
      */
-    protected lateinit var cargo: CargoType
-        private set
+    protected open val cargo: CargoType by lazy(LazyThreadSafetyMode.NONE) { cargoInternal }
+
+    private lateinit var cargoInternal: CargoType
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,9 +45,9 @@ abstract class WheelbarrowActivity<CargoType : Any> : Wheelbarrow<CargoType>, Ap
         if (!cargoHolder.hasCargo) {
             cargoHolder.cargo = onCreateCargo()
         }
-        cargo = cargoHolder.cargo
+        cargoInternal = cargoHolder.cargo
 
         Chronicle.logDebug(this::class.java.simpleName, "Initialised cargo instance: " +
-                "${cargo.identity()} for: ${this.identity()}.")
+                "${cargoInternal.identity()} for: ${this.identity()}.")
     }
 }
