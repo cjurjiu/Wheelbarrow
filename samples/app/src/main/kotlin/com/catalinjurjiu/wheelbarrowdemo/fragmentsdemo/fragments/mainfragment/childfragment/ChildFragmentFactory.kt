@@ -7,7 +7,7 @@ class ChildFragmentFactory(private val injector: ChildFragmentInjector) :
 
     override fun onCreateFragment(): WheelbarrowFragment<ChildFragmentInjector> = ChildFragment()
 
-    override fun onRequestCargo(): ChildFragmentInjector {
+    override fun onCreateCargo(): ChildFragmentInjector {
         return injector
     }
 }

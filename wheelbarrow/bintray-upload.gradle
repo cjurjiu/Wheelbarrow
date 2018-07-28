@@ -53,7 +53,7 @@ publishing {
         BintrayRelease(MavenPublication) {
             artifactId 'wheelbarrow'
             groupId 'com.catalinjurjiu'
-            version '0.0.2'
+            version "${config.lib_versions.wheelbarrow}"
             artifact bundleRelease
             artifact sourcesJar
             artifact dokkaDocJar
@@ -73,7 +73,7 @@ bintray {
         publicDownloadNumbers = true
         override = true
         version {
-            name = '0.0.2'
+            name = "${config.lib_versions.wheelbarrow}"
             desc = 'Wheelbarrow'
             released = new Date()
             licenses = ['Apache-2.0']

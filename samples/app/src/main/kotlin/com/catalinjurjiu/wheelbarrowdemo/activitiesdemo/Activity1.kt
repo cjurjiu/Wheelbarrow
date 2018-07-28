@@ -26,7 +26,7 @@ class Activity1 : WheelbarrowActivity<Activity1Injector>() {
         initViews()
     }
 
-    override fun onCreateInjector() = Activity1InjectorImpl()
+    override fun onCreateCargo() = Activity1InjectorImpl()
 
     private fun initViews() {
         label_screen_name.text = TAG

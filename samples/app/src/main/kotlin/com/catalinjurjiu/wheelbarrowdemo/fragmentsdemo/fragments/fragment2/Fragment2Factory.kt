@@ -7,5 +7,5 @@ class Fragment2Factory(private val injector: Fragment2Injector) :
 
     override fun onCreateFragment(): WheelbarrowFragment<Fragment2Injector> = Fragment2()
 
-    override fun onRequestCargo(): Fragment2Injector = injector
+    override fun onCreateCargo(): Fragment2Injector = injector
 }

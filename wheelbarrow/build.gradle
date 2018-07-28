@@ -49,16 +49,18 @@ artifacts {
 }
 
 dependencies {
-    implementation "com.android.support:appcompat-v7:$config.lib_versions.support_library"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$config.lib_versions.kotlin"
+    //kotlin support
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${config.lib_versions.kotlin}"
+    //support library
+    implementation "com.android.support:appcompat-v7:${config.lib_versions.support_library}"
     //viewmodel & extensions
-    implementation "android.arch.lifecycle:viewmodel:$config.lib_versions.viewmodel"
+    implementation "android.arch.lifecycle:viewmodel:${config.lib_versions.viewmodel}"
     //todo switch to implementation. "api" here is a temporary workaround
-    api "android.arch.lifecycle:extensions:$config.lib_versions.extensions"
+    api "android.arch.lifecycle:extensions:${config.lib_versions.extensions}"
     //unit tests
-    testImplementation "junit:junit:$config.lib_versions.junit"
+    testImplementation "junit:junit:${config.lib_versions.junit}"
     //instrumentation tests
-    androidTestImplementation "com.android.support.test:runner:$config.lib_versions.android_test_runner"
-    androidTestImplementation "com.android.support.test.espresso:espresso-core:$config.lib_versions.espresso_core"
-    androidTestImplementation 'junit:junit:4.12'
+    androidTestImplementation "com.android.support.test:runner:${config.lib_versions.android_test_runner}"
+    androidTestImplementation "com.android.support.test.espresso:espresso-core:${config.lib_versions.espresso_core}"
+    androidTestImplementation "junit:junit:${config.lib_versions.junit}"
 }
