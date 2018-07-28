@@ -345,4 +345,5 @@ For instance, if I navigate back from MyFragment, and then open MyFragment again
 After some experimentation, I finally settled on using the ViewModel, since it just worked with all the corner cases that I threw at it.
 
 **Q: I don't get how to use Wheelbarrow with my particular use case. Where can I get in touch?**
+
 Please open an issue here on Github! 
