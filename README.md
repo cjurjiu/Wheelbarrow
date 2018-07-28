@@ -1,11 +1,25 @@
 # Wheelbarrow <img src="https://github.com/cjurjiu/Wheelbarrow/blob/master/media/icons/wheelbarrow.svg" width="60px" /> [ ![Download](https://api.bintray.com/packages/cjurjiu/cjurjiu-opensource/wheelbarrow/images/download.svg) ](https://bintray.com/cjurjiu/cjurjiu-opensource/wheelbarrow/_latestVersion) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://tldrlegal.com/license/apache-license-2.0-(apache-2.0))
 Simple Android Library to store objects across config changes. Icon by Freepik @ [Flat Icon](www.flaticon.com).
 
+## Table of Contents
+* [About](https://github.com/cjurjiu/Wheelbarrow#about)
+* [Use cases](https://github.com/cjurjiu/Wheelbarrow#use-cases)
+* [Setup](https://github.com/cjurjiu/Wheelbarrow#setup)
+  * [With Activities](https://github.com/cjurjiu/Wheelbarrow#with-activities)
+  * [With Fragments](https://github.com/cjurjiu/Wheelbarrow#with-fragments)
+  * [Dagger2 Usage](https://github.com/cjurjiu/Wheelbarrow#dagger2-usage)
+* [Binaries](https://github.com/cjurjiu/Wheelbarrow#binaries)
+* [FAQ](https://github.com/cjurjiu/Wheelbarrow#faq)
+  
 ## About
 
 Wheelbarrow defines two base classes: **WheelbarrowActivity** and **WheelbarrowFragment**. These classes can store an arbitrary object (reffered to as **the cargo**) across Android configuration changes. They also know when they are destroyed & take care of destroying the persistent object as well, to prevent memory leaks.
 
 Technically, they are thin wrappers over the Support Library AppCompatActivity/Fragment classes. The **cargo** is stored using a ViewModel from the Android Architecture Components.
+
+Samples are available:
+* [Kotlin Sample](https://github.com/cjurjiu/Wheelbarrow/tree/master/samples/app) 
+* [Kotlin Sample - With Dagger2](https://github.com/cjurjiu/Wheelbarrow/tree/master/samples/dagger-app) 
 
 ## Use cases
 
@@ -272,7 +286,32 @@ For `Fragments` the process is similar. The main difference is that you create t
 See also the [Dagger Sample](https://github.com/cjurjiu/Wheelbarrow/tree/master/samples/dagger-app) for reference.
 
 ## Binaries
-//TODO
+
+Binaries and dependency information for Maven, Ivy, Gradle and others can be found on [jcenter](https://bintray.com/cjurjiu/cjurjiu-opensource/wheelbarrow).
+
+Example for Gradle:
+
+```groovy
+implementation 'com.catalinjurjiu:wheelbarrow:0.0.2'
+```
+
+and for Maven:
+
+```xml
+<dependency>
+  <groupId>com.catalinjurjiu</groupId>
+  <artifactId>wheelbarrow</artifactId>
+  <version>0.0.2</version>
+  <type>pom</type>
+</dependency>
+```
+and for Ivy:
+
+```xml
+<dependency org='com.catalinjurjiu' name='wheelbarrow' rev='0.0.2'>
+  <artifact name='wheelbarrow' ext='pom' ></artifact>
+</dependency>
+```
 
 ## FAQ
 //TODO
