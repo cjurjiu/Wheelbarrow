@@ -175,7 +175,101 @@ public class MainFragmentFactory extends WheelbarrowFragment.Factory<MyPresenter
 ```
 
 ### Dagger2 Usage
-//TODO
+
+When using Dagger2, there might be times when using the same Component (or Subcomponent) after a configuration change is required. 
+
+Such cases arise usually when you want after a config change to inject your Fragments/Activities with the same dependencies used previously, or when you *really* don't want to recreate a module of your component, each time the screen is rotated. 
+
+Of course, those dependencies could be moved to a higher Dagger2 scope (which presumably wouldn't get torn down & recreated each time the screen rotates), but sometimes they might not make sense in the higher scope. 
+
+Since Wheelbarrow persists one object across config changes, it can also persist your Dagger2 Component, for a given Screen (Fragment or Activity)
+
+**Quick setup**
+
+Assume again, you have 2 dependencies injected by Dagger2 that you want to reuse in your **MainActivity** - **MyPresenter**, and **MyRepository**.
+
+Declare your Dagger2 Module & Component and custom scope:
+
+```java
+//define custom scope, s.t. the objects created by Dagger2 represent 
+//unique instances within the same Dagger2 Component
+@Scope
+@Retention(RetentionPolicy.RUNTIME)
+public @interface MainActivityScope {}
+
+//define the module
+@Module
+public class MainActivityModule {    
+    //ensure both methods return objects for the "MainActivityScope".
+
+    @Provides
+    @MainActivityScope
+    public MyPresenter providePresenter(...) {
+        return new MyPresenter(...)
+    }
+    
+    @Provides
+    @MainActivityScope
+    public MyRepository provideRepository(...) {
+        return new MyRepository(...)
+    }
+}
+
+//define the Component
+@MainActivityScope
+@Component(modules = { MainActivityModule.class })
+public abstract class MainActivityComponent {
+
+    abstract void inject(MainActivity mainActivity)
+}
+```
+
+Now, in **MainActivity.java**:
+
+```java
+//Extend WheelbarrowActivity, set "CargoType" to your Dagger2 Component type. 
+//In our case it's "MainActivityComponent".
+public final class MainActivity extends WheelbarrowActivity<MainActivityComponent> {
+
+    //fields to store the Presenter & Repository to be injected
+    @Inject
+    protected MyPresenter presenter;
+    @Inject
+    protected MyRepository repository;
+
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        //remember to call super.onCreate() - not doing so will result in uninitialised cargo 
+        super.onCreate(savedInstanceState);
+        
+        //Done! Our Dagger2 component (of type MainActivityComponent) is now available as Cargo.
+        //Get it, and inject our Activity
+        getCargo().inject(this);
+        
+        //do the rest of the initialization. setContentView can also be called before "getCargo()"
+        setContentView(R.layout.activity_main);
+    }
+
+    @NotNull
+    public MainActivityComponent onCreateCargo() { 
+        //onCreateCargo is called only the first time the Activity is created, 
+        //when it first creates its Dagger2 Component
+        //onCreateCargo is invoked during super.onCreate() 
+        return new MainActivityComponent(new MainActivityModule(...));
+    }
+
+    @NotNull
+    public String getName() { 
+        //a name for this Activity is required by Wheelbarrow
+        return "MainActivity";
+    }
+}
+```
+
+And you're done! After each configuration change, in `onCreate(...)` you only need to call `getCargo().inject(this)` to make sure your `Activity` is Injected with the same dependencies as before. 
+
+For `Fragments` the process is similar. The main difference is that you create the Dagger2 Component in your `WheelbarrowFragment.Factory` subclass, and not in the `Fragment` itself.
+
+See also the [Dagger Sample](https://github.com/cjurjiu/Wheelbarrow/tree/master/samples/dagger-app) for reference.
 
 ## Binaries
 //TODO
