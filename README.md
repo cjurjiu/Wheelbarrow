@@ -21,6 +21,8 @@ Samples are available:
 * [Kotlin Sample](https://github.com/cjurjiu/Wheelbarrow/tree/master/samples/app) 
 * [Kotlin Sample - With Dagger2](https://github.com/cjurjiu/Wheelbarrow/tree/master/samples/dagger-app) 
 
+PR's & Improvement ideas are welcomed!
+
 ## Use cases
 
 So when is Wheelbarrow useful? Well, it's useful when:
@@ -314,4 +316,33 @@ and for Ivy:
 ```
 
 ## FAQ
-//TODO
+**Q: Is the API stable?**
+
+Mostly yes. I do not plan on removing anything at the time being. Depending on feedback certain things might be tweaked (like the visibility of the **cargo** in the WheelbarrowActivity/Fragment, from protected->public), but nothing more.
+
+Would appreciate any suggestions!
+
+**Q: Why does the Fragment get a "Factory" whereas the Activity doesn't?**
+
+Because we as application developers are the ones in charge with creating the initial instance of a **Fragment** via calling a constructor. In the **Activity** case however the Android Framework is the one that creates the object, hence we *currently* cannot perform the setup right after instantiating an **Activity**, like we do with **Fragments**.
+
+Looking at [AppComponentFactory](https://developer.android.com/reference/androidx/core/app/AppComponentFactory) a `Factory` should theoretically be also possible for Activities, but it would only be usable on API 28+. 
+
+**Q: Wheelbarrow is just a thin wrapper that uses a ViewModel to store an object. Why would I use it and not roll my own?**
+
+That's a perfectly reasonable thing to say. There are multiple ways of storing things across configuration changes, and each developer probably has by now her/his own mechanism to achieve this. 
+
+Wheelbarrow is just the solution that I arrived at, and decided to release as a standalone tool. If you have something that's already working for you, there's no real reason to migrate.
+
+However, if you still didn't find an approach which solves this for you, then you might want to play with Wheelbarrow and not think about it again.
+
+**Q: Why use the ViewModel to store the Cargo?**
+
+I have attempted multiple ways of achieving this and I found that it was rather hard to get all the corner cases right. 
+
+For instance, if I navigate back from MyFragment, and then open MyFragment again, then I want a new instance of my Presenter, and not the old one, since this was just navigation, not a configuration change. Also, if I want to save something, I don't want to use a static member, but also I don't want to rely on "onRetainNonConfigurationChanged" to save things. Headless Fragments were also something that I looked at, but they also had their flaws.
+
+After some experimentation, I finally settled on using the ViewModel, since it just worked with all the corner cases that I threw at it.
+
+**Q: I don't get how to use Wheelbarrow with my particular use case. Where can I get in touch?**
+Please open an issue here on Github! 
