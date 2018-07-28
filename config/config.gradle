@@ -14,7 +14,7 @@ def library_versions = [
         android_test_runner: '1.0.1',
         espresso_core      : '3.0.1',
         //wheelbarrow version
-        wheelbarrow        : '0.0.2'
+        wheelbarrow        : '0.0.3'
 ]
 
 def build_versions = [
