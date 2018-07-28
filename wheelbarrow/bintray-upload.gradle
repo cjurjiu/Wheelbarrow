@@ -53,21 +53,19 @@ publishing {
         BintrayRelease(MavenPublication) {
             artifactId 'wheelbarrow'
             groupId 'com.catalinjurjiu'
-            version '0.0.1'
-            setArtifacts(
-                    Arrays.asList(bundleRelease,
-                            sourcesJar,
-                            dokkaDocJar)
-            )
+            version '0.0.2'
+            artifact bundleRelease
+            artifact sourcesJar
+            artifact dokkaDocJar
             writeDependenciesToPom(pom, configurations)
         }
     }
 }
 
 bintray {
+    publications = ['BintrayRelease']
     user = localProperties.getProperty('bintrayUser')
     key = localProperties.getProperty('bintrayApiKey')
-    publications = ['BintrayRelease']
     pkg {
         repo = 'cjurjiu-opensource'
         name = 'wheelbarrow'
@@ -75,7 +73,7 @@ bintray {
         publicDownloadNumbers = true
         override = true
         version {
-            name = '0.0.1'
+            name = '0.0.2'
             desc = 'Wheelbarrow'
             released = new Date()
             licenses = ['Apache-2.0']

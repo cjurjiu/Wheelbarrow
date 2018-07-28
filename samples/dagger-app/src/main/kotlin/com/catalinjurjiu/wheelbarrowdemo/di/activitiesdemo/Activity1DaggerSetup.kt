@@ -14,7 +14,6 @@ abstract class Activity1Component {
     abstract fun inject(activity1: Activity1)
 }
 
-@Activity2Scope
 @Module
 class Activity1Module {
 

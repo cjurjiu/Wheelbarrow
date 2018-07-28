@@ -11,7 +11,7 @@ task dokkaDocJar(type: Jar, dependsOn: dokka) {
 dokka {
     moduleName = project.name
     outputFormat = 'html'
-    outputDirectory = "${project.buildDir}/javadoc}"
+    outputDirectory = "${project.buildDir}/javadoc"
     // These tasks will be used to determine source directories and classpath
     kotlinTasks {
         defaultKotlinTasks()
