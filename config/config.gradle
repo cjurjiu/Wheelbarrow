@@ -1,5 +1,5 @@
 def library_versions = [
-        kotlin             : '1.2.51',
+        kotlin             : '1.2.60',
         support_library    : '27.1.1',
         //viewmodel & extensions
         viewmodel          : '1.1.1',
@@ -14,7 +14,7 @@ def library_versions = [
         android_test_runner: '1.0.1',
         espresso_core      : '3.0.1',
         //wheelbarrow version
-        wheelbarrow        : '0.0.3'
+        wheelbarrow        : '0.0.4'
 ]
 
 def build_versions = [

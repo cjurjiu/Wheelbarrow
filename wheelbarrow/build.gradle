@@ -3,14 +3,17 @@ apply plugin: 'kotlin-android'
 apply from: 'bintray-upload.gradle'
 apply from: 'dokka-config.gradle'
 
+def wheelbarrowVersionCode = "${config.lib_versions.wheelbarrow.trim().replace(".", "")}".toInteger()
+println("Wheelbarrow version code is: $wheelbarrowVersionCode")
+
 android {
     compileSdkVersion "$config.build_versions.compileSdkVersion".toInteger()
 
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 27
-        versionCode 3
-        versionName "0.0.3"
+        versionCode wheelbarrowVersionCode
+        versionName "${config.lib_versions.wheelbarrow}"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
