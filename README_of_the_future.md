@@ -80,6 +80,10 @@ After a configuration change, the **cargo** previously set will be reinitialized
 
 In our sample, this means that an instance of **MyPresenter** is created the first time **MyActivity** is created. After a configuration change, the the **new MainActivity** instance will have access to the previously created **MyPresenter** instance through `getCargo()`. Neat!
 
+#### `onRetainCustomNonConfigurationInstance()`
+
+`onRetainCustomNonConfigurationInstance()` & `getLastCustomNonConfigurationInstance()` should no longer be used to save a custom object. Instead, `onRetainCustomObject()` & `getRetainedCustomObject()` are provided, and can be used as drop-in replacements.
+
 ### With Fragments
 
 Using the same scenario from the Activity example, configuring your Presenter to be the same across orientation changes is done the following way:
@@ -316,12 +320,6 @@ and for Ivy:
 ```
 
 ## FAQ
-**Q: Is the API stable?**
-
-Mostly yes. I do not plan on removing anything at the time being. Depending on feedback certain things might be tweaked (like the visibility of the **cargo** in the WheelbarrowActivity/Fragment, from protected->public), but nothing more.
-
-Would appreciate any suggestions!
-
 **Q: Why does the Fragment get a "Factory" whereas the Activity doesn't?**
 
 Because we as application developers are the ones in charge with creating the initial instance of a **Fragment** via calling a constructor. In the **Activity** case however the Android Framework is the one that creates the object, hence we *currently* cannot perform the setup right after instantiating an **Activity**, like we do with **Fragments**.
@@ -336,14 +334,30 @@ Wheelbarrow is just the solution that I arrived at, and decided to release as a 
 
 However, if you still didn't find an approach which solves this for you, then you might want to play with Wheelbarrow and not think about it again.
 
+**Q: Is the API stable?**
+
+Mostly yes. Depending on feedback certain things might be tweaked (like the visibility of the **cargo** in the WheelbarrowActivity/Fragment, from protected->public), but nothing more.
+
+Would appreciate any suggestions!
+
 **Q: Why use the ViewModel to store the Cargo?**
 
 I have attempted multiple ways of achieving this and I found that it was rather hard to get all the corner cases right. 
 
-For instance, if I navigate back from MyFragment, and then open MyFragment again, then I want a new instance of my Presenter, and not the old one, since this was just navigation, not a configuration change. Also, if I want to save something, I don't want to use a static member, but also I don't want to rely on "onRetainNonConfigurationChanged" to save things. Headless Fragments were also something that I looked at, but they also had their flaws.
+For instance, if I navigate back from MyFragment, and then open MyFragment again, then I want a new instance of my Presenter, and not the old one, since this was just navigation, not a configuration change. Also, if I want to save something, I don't want to use a static member, but also I don't want to rely on `onRetainNonConfigurationChanged` from `Activity` to save things (especially not in Fragments). Headless Fragments were also something that I looked at, but they also had their flaws.
 
 After some experimentation, I finally settled on using the ViewModel, since it just worked with all the corner cases that I threw at it.
 
+**Q: Why shouldn't I use `onRetainCustomNonConfigurationInstance()` & `getLastCustomNonConfigurationInstance()` if I use Wheelbarrow?**
+
+THe current version of Wheelbarrow is based on `v27.1.1`  of the support library. The ViewModel API has a nasty bug in this version, described [here](https://issuetracker.google.com/issues/73644080).
+
+**TL;DR** : In a very specific case a `ViewModel` is not properly saved, and a new one is returned after a configuration change.
+
+As a fix to this issue, the `onRetainCustomNonConfigurationInstance` method was used to ensure the `ViewModel` is properly saved. To make sure that library clients do not override this method & break the fix, `onRetainCustomNonConfigurationInstance` has been made final.
+
+In order to allow clients to then save their objects as before, the two new alternatives have been provided, namely `onRetainCustomObject()` & `getRetainedCustomObject()`, which can be used as drop-in replacements.
+
 **Q: I don't get how to use Wheelbarrow with my particular use case. Where can I get in touch?**
 
-Please open an issue here on Github! 
+Please open an issue here on Github!

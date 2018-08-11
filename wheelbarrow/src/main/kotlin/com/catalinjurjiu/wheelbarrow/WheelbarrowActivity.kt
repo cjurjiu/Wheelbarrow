@@ -1,5 +1,7 @@
 package com.catalinjurjiu.wheelbarrow
 
+import android.arch.lifecycle.ViewModel
+import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -40,7 +42,8 @@ abstract class WheelbarrowActivity<CargoType : Any> : Wheelbarrow<CargoType>, Ap
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val cargoHolder: ViewModelCargoHolder<CargoType> = ViewModelProviders.of(this)
+        val factory = getViewModelFactory()
+        val cargoHolder: ViewModelCargoHolder<CargoType> = ViewModelProviders.of(this, factory)
                 .get(name, ViewModelCargoHolder::class.java) as ViewModelCargoHolder<CargoType>
         if (!cargoHolder.hasCargo) {
             cargoHolder.cargo = onCreateCargo()
@@ -49,5 +52,64 @@ abstract class WheelbarrowActivity<CargoType : Any> : Wheelbarrow<CargoType>, Ap
 
         Chronicle.logDebug(this::class.java.simpleName, "Initialised cargo instance: " +
                 "${cargoInternal.identity()} for: ${this.identity()}.")
+    }
+
+    final override fun onRetainCustomNonConfigurationInstance(): Any? {
+        val current = ViewModelProviders.of(this)
+                .get(name, ViewModelCargoHolder::class.java)
+
+        //this workaround with a factory required by https://issuetracker.google.com/issues/73644080
+        var factory = getViewModelFactory()
+        if (factory == null) {
+            factory = WheelbarrowViewModelProvideFactory(currentViewModel = current)
+        }
+        val clientCustomObject: Any? = onRetainCustomObject()
+        return NonConfigDataHolder(factory = factory, clientObject = clientCustomObject)
+    }
+
+    final override fun getLastCustomNonConfigurationInstance(): Any? {
+        return super.getLastCustomNonConfigurationInstance()
+    }
+
+    /**
+     * Use this instead of [onRetainNonConfigurationInstance] or [onRetainCustomNonConfigurationInstance].
+     *
+     * Retrieve later with [getLastCustomNonConfigurationInstance].
+     */
+    open fun onRetainCustomObject(): Any? {
+        return null
+    }
+
+    /**
+     * Return the value previously returned from [onRetainCustomObject].
+     */
+    fun getRetainedCustomObject(): Any? {
+        return (lastCustomNonConfigurationInstance as NonConfigDataHolder?)?.clientObject
+    }
+
+    private fun getViewModelFactory(): ViewModelProvider.Factory? =
+            (lastCustomNonConfigurationInstance as NonConfigDataHolder?)?.factory
+}
+
+/**
+ * Internal class which stores an arbitrary object stored by a client, and a [ViewModelProvider.Factory].
+ */
+private data class NonConfigDataHolder(val factory: ViewModelProvider.Factory?,
+                                       val clientObject: Any?)
+
+private class WheelbarrowViewModelProvideFactory(val currentViewModel: ViewModelCargoHolder<*>) : ViewModelProvider.Factory {
+
+    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        return if (modelClass.isInstance(currentViewModel)) {
+            currentViewModel as T
+        } else {
+            try {
+                modelClass.newInstance()
+            } catch (e: InstantiationException) {
+                throw RuntimeException("Cannot create an instance of $modelClass", e)
+            } catch (e: IllegalAccessException) {
+                throw RuntimeException("Cannot create an instance of $modelClass", e)
+            }
+        }
     }
 }
